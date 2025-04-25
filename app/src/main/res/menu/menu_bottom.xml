@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/btnPastAppointments"
+        android:icon="@drawable/ic_past"
+        android:title="Past Appointments"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/btnFutureAppointments"
+        android:icon="@drawable/ic_future"
+        android:title="Future Appointments"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/btnRecords"
+        android:icon="@drawable/ic_record"
+        android:title="Records"
+        app:showAsAction="ifRoom" />
+</menu>

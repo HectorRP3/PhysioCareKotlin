@@ -39,7 +39,9 @@ class SessionManager(private val dataStore: DataStore<Preferences>){
 
     //Funcion para limpiar la sesión. Barra los datos del fichero settings.
     suspend fun clearSession(){
-        dataStore.edit{ it.clear() }
+        dataStore.edit{ preferences ->
+            preferences.clear()
+        }
     }
 
 }

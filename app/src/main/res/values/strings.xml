@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">PhysioCare</string>
+    <string name="ErrorNombre">Error en el campo de nombre</string>
+    <string name="errorPassword">Error en la contraseña</string>
+    <string name="errorLogIn">Error al iniciar sesión claves incorrectas</string>
+    <string name="correctLogIn">Has iniciado sesion como: %1$s</string>
 </resources>
