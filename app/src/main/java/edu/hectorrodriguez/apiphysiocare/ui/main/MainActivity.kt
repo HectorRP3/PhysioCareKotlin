@@ -10,6 +10,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -18,24 +19,35 @@ import edu.hectorrodriguez.apiphysiocare.R
 import edu.hectorrodriguez.apiphysiocare.data.Repository
 import edu.hectorrodriguez.apiphysiocare.databinding.ActivityMainBinding
 import edu.hectorrodriguez.apiphysiocare.databinding.LayoutUserinfoBinding
+import edu.hectorrodriguez.apiphysiocare.model.LoginState
+import edu.hectorrodriguez.apiphysiocare.ui.fragment.FragmentAppointment
 import edu.hectorrodriguez.apiphysiocare.ui.login.LoginActivity
 import edu.hectorrodriguez.apiphysiocare.utils.SessionManager
+import edu.hectorrodriguez.apiphysiocare.utils.checkConnection
 import edu.hectorrodriguez.apiphysiocare.utils.dataStore
+import edu.hectorrodriguez.apiphysiocare.utils.pastAppointments
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.time.Instant
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+import kotlin.math.log
 
 
 class MainActivity : AppCompatActivity() {
     private val TAG = MainActivity::class.java.simpleName
-    companion object {
-        fun navigate(activity: Activity) {
-            val intent = Intent(activity, MainActivity::class.java)
-            activity.startActivity(
-                intent,
-                ActivityOptions.makeSceneTransitionAnimation(activity).toBundle()
-            )
-        }
+    private lateinit var appointementFragment: FragmentAppointment
+    //private lateinit var addFragment: FragmentAdd
+
+    private val adapter by lazy {
+        AppointementAdapter(
+            onAppointementClick = { appointement ->
+                Log.d(TAG, "onClick: ${appointement}")
+            },
+
+        )
     }
+
 
     private val vm: MainViewModel by viewModels {
        val repository = Repository(SessionManager(dataStore))
@@ -54,21 +66,31 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        appointementFragment = FragmentAppointment()
         binding.mToolbar.inflateMenu(R.menu.menu_top)
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
                 val rol = vm.getSessionFlowRol().first().second.toString()
-                var nombre = vm.getSessionFlow().first().second
-                binding.mToolbar.setTitle("PhysioCare | $rol $nombre")
+                binding.mToolbar.setTitle("PhysioCare | $rol ")
+                val date = Instant.now().atZone(ZoneOffset.UTC).format(DateTimeFormatter.ISO_LOCAL_DATE )
+                binding.mToolbar.setSubtitle("Dia de hoy: "+date)
                 if(rol == "patient"){
                     blockRolButtonsPatients()
                 }else{
                     unBlockRolButtonsPhysios()
                 }
+                loadFragment(appointementFragment)
             }
-
         }
 
+
+    }
+
+    private fun loadFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(binding.mFrameLayout.id, fragment)
+            .commit()
+        vm.setFragmentShowed(fragment.javaClass.simpleName)
     }
 
     override fun onStart() {
@@ -92,6 +114,31 @@ class MainActivity : AppCompatActivity() {
                 else -> {
                     false
                 }
+            }
+        }
+        binding.mBottomNavView.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.btnRecords -> {
+                    Log.d(TAG, "btnRecords")
+                    true
+                }
+                R.id.btnPastAppointments -> {
+                    Log.d(TAG, "btnProfile")
+                    pastAppointments=true
+                    appointementFragment = FragmentAppointment()
+                    loadFragment(appointementFragment)
+                    Log.d(TAG, "pastAppointments: $pastAppointments")
+                    true
+                }
+                R.id.btnFutureAppointments -> {
+                    Log.d(TAG, "btnProfile")
+                    pastAppointments=false
+                    appointementFragment = FragmentAppointment()
+                    loadFragment(appointementFragment)
+                    Log.d(TAG, "pastAppointments: $pastAppointments")
+                    true
+                }
+                else -> false
             }
         }
 
@@ -118,4 +165,87 @@ class MainActivity : AppCompatActivity() {
         binding.mBottomNavView.menu.findItem(R.id.btnRecords).isVisible = true
     }
 
+    private fun showAppointments(){
+        adapter.submitList(emptyList())
+        if(checkConnection(this)) {
+            lifecycleScope.launch {
+                vm.getAllAppointements()
+                vm.appointementsState.collect {
+                    if (!pastAppointments) {
+                        val dateNow = Instant.now().atZone(ZoneOffset.UTC)
+                        val appointemenFut = it.filter { d ->
+                            val date = Instant.parse(d.date).atZone(ZoneOffset.UTC)
+                            date > dateNow
+                        }
+                        adapter.submitList(appointemenFut)
+                    } else {
+                        val dateNow = Instant.now().atZone(ZoneOffset.UTC)
+                        val appointementPast = it.filter { d ->
+                            val date = Instant.parse(d.date).atZone(ZoneOffset.UTC)
+                            date < dateNow
+                        }
+                        adapter.submitList(appointementPast)
+                    }
+
+                }
+                /* vm.loginState.collect {
+                    when (it) {
+                        is LoginState.Idle ->{
+                            Log.i(TAG, "Idle")
+                            vm.getAllAppointements()
+                            vm.appointementsState.collect {
+                                if(pastAppointments){
+                                    val dateNow = Instant.now().atZone(ZoneOffset.UTC)
+                                    var appointemenFut = it.filter { d->
+                                        val date = Instant.parse(d.date).atZone(ZoneOffset.UTC)
+                                        date > dateNow
+                                    }
+                                    adapter.submitList(appointemenFut)
+                                }else{
+                                    val dateNow = Instant.now().atZone(ZoneOffset.UTC)
+                                    var appointementPast = it.filter { d->
+                                        val date = Instant.parse(d.date).atZone(ZoneOffset.UTC)
+                                        date < dateNow
+                                    }
+                                    adapter.submitList(appointementPast)
+                                }
+
+                            }
+                        }
+                        is LoginState.Loading -> Log.i(TAG, "Loading")
+                        is LoginState.Success -> {
+                            Log.i(TAG, "Success: ${it.response.token}")
+                            vm.getAllAppointements()
+                            vm.appointementsState.collect {
+                                if(pastAppointments){
+                                    val dateNow = Instant.now().atZone(ZoneOffset.UTC)
+                                    var appointemenFut = it.filter { d->
+                                        val date = Instant.parse(d.date).atZone(ZoneOffset.UTC)
+                                        date > dateNow
+                                    }
+                                    adapter.submitList(appointemenFut)
+                                }else{
+                                    val dateNow = Instant.now().atZone(ZoneOffset.UTC)
+                                    var appointementPast = it.filter { d->
+                                        val date = Instant.parse(d.date).atZone(ZoneOffset.UTC)
+                                        date < dateNow
+                                    }
+                                    adapter.submitList(appointementPast)
+                                }
+
+                            }
+                        }
+
+                        is LoginState.Error -> {
+                            Log.e(TAG, "Error: ${it.message}")
+                        }
+                    }
+                    return@collect
+                }
+                return@launch
+            }*/
+            }
+        }
+
+    }
 }

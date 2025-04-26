@@ -3,8 +3,10 @@ package edu.hectorrodriguez.apiphysiocare.data
 import android.util.Log
 import edu.hectorrodriguez.apiphysiocare.model.LoginRequest
 import edu.hectorrodriguez.apiphysiocare.model.LoginResponse
+import edu.hectorrodriguez.apiphysiocare.model.appointements.AppointementsResponse
 import edu.hectorrodriguez.apiphysiocare.utils.SessionManager
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 class Repository(private val sessionManager: SessionManager){
@@ -22,8 +24,8 @@ class Repository(private val sessionManager: SessionManager){
      */
     suspend fun login(request: LoginRequest): LoginResponse {
         val response = remoteDataSource.login(request)
-        sessionManager.saveSession(response.token!!, request.login,response.rol.toString()) // Se guarda la sesión
-        Log.i("Repository", sessionManager.sessionFlowUser.map { it }.toString())
+        sessionManager.saveSession(response.token!!, response.id.toString(),response.rol.toString()) // Se guarda la sesión
+        Log.i("Repository", sessionManager.sessionFlowUser.first().second.toString())
         Log.i("Repository", sessionManager.sessionFlowRol.map { it }.toString())
         return response
     }
@@ -37,4 +39,33 @@ class Repository(private val sessionManager: SessionManager){
     suspend fun logout(){
         sessionManager.clearSession()
     }
+
+    ////////// Appointements ///////////
+    /**
+     * Funcion para obtener todos los appointments de la api
+     * @param token Token de la sesión
+     * @param id Id del usuario
+     * @param rol Rol del usuario
+     * @return Devuelve un objeto AppointementsResponse con todos los appointments o nullo si ha habido un error
+     * @author Héctor Rodríguez Planelles
+     */
+    //Funcion junta y pasandole el rol tmabien para separar las cosas
+    suspend fun fetchAppointements(token:String,id:String,rol:String) : AppointementsResponse? {
+        lateinit var response: AppointementsResponse
+        try{
+            if(rol == "patient") {
+                response = remoteDataSource.fechthAppointementsPatient(token, id)
+                return response
+            }else{
+                response = remoteDataSource.fechthAppointementsPhysio(token, id)
+                return response
+            }
+        }catch (e:Exception){
+         return null
+        }
+
+
+    }
+
+
 }

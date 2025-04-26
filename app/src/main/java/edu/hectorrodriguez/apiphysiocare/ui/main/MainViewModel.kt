@@ -1,16 +1,22 @@
 package edu.hectorrodriguez.apiphysiocare.ui.main
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import edu.hectorrodriguez.apiphysiocare.data.Repository
 import edu.hectorrodriguez.apiphysiocare.model.LoginRequest
 import edu.hectorrodriguez.apiphysiocare.model.LoginState
+import edu.hectorrodriguez.apiphysiocare.model.appointements.AppointementsResponse
+import edu.hectorrodriguez.apiphysiocare.model.appointements.Appointments
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class MainViewModel(private val repository: Repository): ViewModel() {
+    private val TAG = MainViewModel::class.java.simpleName
+
     ////////// Login ////////////
     private val _loginState = MutableStateFlow<LoginState>(LoginState.Idle)
     val loginState: StateFlow<LoginState>
@@ -39,6 +45,46 @@ class MainViewModel(private val repository: Repository): ViewModel() {
     fun getSessionFlow() = repository.getSessionFlowUser()
     //Funcion para obtener el flow del rol
     fun getSessionFlowRol() = repository.getSessionFlowRol()
+
+    //////// Appointements ///////////
+    private val _appointementsState = MutableStateFlow(Appointments())
+    val appointementsState: MutableStateFlow<Appointments>
+        get() = _appointementsState
+
+    /**
+     * Función para obtener todos los appointments de la api y los guarda en un mutable state flow
+     * @author Héctor Rodríguez Planelles
+     */
+    fun getAllAppointements() {
+        viewModelScope.launch {
+            val token = repository.getSessionFlowUser().first().first
+            Log.i(TAG," Token: $token")
+            val id = repository.getSessionFlowUser().first().second
+            Log.i(TAG," Id: $id")
+            val rol = repository.getSessionFlowRol().first().second
+            Log.i(TAG," Rol: $rol")
+            if (token != null) {
+                val appointementsAux = repository.fetchAppointements(token, id.toString(), rol.toString())
+                if(appointementsAux != null){
+                    _appointementsState.value = appointementsAux.appointments
+                }else{
+                    _appointementsState.value = Appointments()
+                }
+                Log.i(TAG," Appointements: ${_appointementsState.value}")
+            } else {
+                _appointementsState.value = Appointments()
+            }
+        }
+    }
+    //////////// Fragment Showed ////////////
+    private var _fragmentShowed: String? = null
+
+    val fragmentShowed: String?
+        get() = _fragmentShowed
+
+    fun setFragmentShowed(fragmentName:String){
+        _fragmentShowed = fragmentName
+    }
 }
 
 @Suppress("UNCHECKED_CAST")

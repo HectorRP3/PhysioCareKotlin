@@ -22,3 +22,5 @@ fun  checkConnection(context: Context) : Boolean{
 
     return false
 }
+
+var pastAppointments = true
