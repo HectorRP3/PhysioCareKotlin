@@ -21,6 +21,7 @@ import edu.hectorrodriguez.apiphysiocare.databinding.ActivityMainBinding
 import edu.hectorrodriguez.apiphysiocare.databinding.LayoutUserinfoBinding
 import edu.hectorrodriguez.apiphysiocare.model.LoginState
 import edu.hectorrodriguez.apiphysiocare.ui.fragment.FragmentAppointment
+import edu.hectorrodriguez.apiphysiocare.ui.fragment.FragmentRecord
 import edu.hectorrodriguez.apiphysiocare.ui.login.LoginActivity
 import edu.hectorrodriguez.apiphysiocare.utils.SessionManager
 import edu.hectorrodriguez.apiphysiocare.utils.checkConnection
@@ -37,7 +38,7 @@ import kotlin.math.log
 class MainActivity : AppCompatActivity() {
     private val TAG = MainActivity::class.java.simpleName
     private lateinit var appointementFragment: FragmentAppointment
-    //private lateinit var addFragment: FragmentAdd
+    private lateinit var recordFragment: FragmentRecord
 
     private val adapter by lazy {
         AppointementAdapter(
@@ -67,6 +68,7 @@ class MainActivity : AppCompatActivity() {
             insets
         }
         appointementFragment = FragmentAppointment()
+        recordFragment = FragmentRecord()
         binding.mToolbar.inflateMenu(R.menu.menu_top)
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED){
@@ -120,6 +122,7 @@ class MainActivity : AppCompatActivity() {
             when (it.itemId) {
                 R.id.btnRecords -> {
                     Log.d(TAG, "btnRecords")
+                    loadFragment(recordFragment)
                     true
                 }
                 R.id.btnPastAppointments -> {
