@@ -23,6 +23,11 @@ data class AppointementsResponse(
     @SerializedName("resultado") val appointments:Appointments,
 )
 
+data class AppointementResponse(
+    @SerializedName("ok") val ok: Boolean,
+    @SerializedName("resultado") val appointments:AppointmentsItem,
+)
+
 data class AppointmentsRequest(
     @SerializedName("date") val date: String,
     @SerializedName("diagnosis") val diagnosis: String,

@@ -4,4 +4,14 @@
     <string name="errorPassword">Error en la contraseña</string>
     <string name="errorLogIn">Error al iniciar sesión claves incorrectas</string>
     <string name="correctLogIn">Has iniciado sesion como: %1$s</string>
+    <string name="dia"><strong>Dia:</strong> %1$s</string>
+    <string name="diagnosis"><b>Diagnosis:</b> %1$s</string>
+    <string name="observations"><b>Observaciones:</b> %1$s</string>
+    <string name="treatment"><b>Tratamiento:</b> %1$s</string>
+    <string name="name"><b>Nombre:</b> %1$s</string>
+    <string name="surname"><b>Apellido:</b> %1$s</string>
+    <string name="email"><b>Email:</b> %1$s</string>
+    <string name="specialty"><b>Especialidad:</b> %1$s</string>
+    <string name="licenseNumber"><b>Numero de licencia:</b> %1$s</string>
+    <string name="title_cita">Detalles de la cita</string>
 </resources>

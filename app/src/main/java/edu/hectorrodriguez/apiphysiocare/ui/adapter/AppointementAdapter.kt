@@ -1,18 +1,22 @@
-package edu.hectorrodriguez.apiphysiocare.ui.main
+package edu.hectorrodriguez.apiphysiocare.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import edu.hectorrodriguez.apiphysiocare.databinding.ItemAppointmentsBinding
 import edu.hectorrodriguez.apiphysiocare.model.appointements.AppointmentsItem
+import edu.hectorrodriguez.apiphysiocare.utils.isPhysio
 import java.time.Instant
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
-class AppointementAdapter(private val onAppointementClick:(idAppointement:String)->Unit):ListAdapter<AppointmentsItem,AppointementAdapter.AppointementViewHolder>(AppointementDiffCallback()) {
-    override fun onCreateViewHolder(parent: android.view.ViewGroup, viewType: Int): AppointementViewHolder {
+class AppointementAdapter(private val onAppointementClick:(idAppointement:String)->Unit,
+                          private val onDeleteClick:(idAppointement:String)->Unit):
+    ListAdapter<AppointmentsItem, AppointementAdapter.AppointementViewHolder>(AppointementDiffCallback()) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AppointementViewHolder {
         return AppointementViewHolder(
             ItemAppointmentsBinding.inflate(
                 LayoutInflater.from(parent.context),
@@ -35,6 +39,15 @@ class AppointementAdapter(private val onAppointementClick:(idAppointement:String
             val resultado = dateFormar.format(DateTimeFormatter.ISO_LOCAL_DATE )
 
             bind.tvDate.setText(resultado)
+
+            if(isPhysio){
+                bind.imgButton.setOnClickListener {
+                    onDeleteClick(appointement.id.toString())
+                }
+                bind.imgButton.visibility = View.VISIBLE
+            }else{
+                bind.imgButton.visibility = View.GONE
+            }
 
             itemView.setOnClickListener{
                 onAppointementClick(appointement.id.toString())

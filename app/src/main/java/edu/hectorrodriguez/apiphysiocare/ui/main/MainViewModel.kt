@@ -76,6 +76,19 @@ class MainViewModel(private val repository: Repository): ViewModel() {
             }
         }
     }
+    //delete appointement by id
+    fun deleteAppointement(id: String) {
+        viewModelScope.launch {
+            val token = repository.getSessionFlowUser().first().first
+            Log.i(TAG," Token: $token")
+            if (token != null) {
+                repository.deleteAppointement(token, id)
+                Log.i(TAG," Appointements: ${_appointementsState.value}")
+            } else {
+                _appointementsState.value = Appointments()
+            }
+        }
+    }
     //////////// Fragment Showed ////////////
     private var _fragmentShowed: String? = null
 
@@ -85,6 +98,8 @@ class MainViewModel(private val repository: Repository): ViewModel() {
     fun setFragmentShowed(fragmentName:String){
         _fragmentShowed = fragmentName
     }
+
+    ///
 }
 
 @Suppress("UNCHECKED_CAST")

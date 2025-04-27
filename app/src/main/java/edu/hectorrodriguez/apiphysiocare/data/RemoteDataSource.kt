@@ -3,7 +3,9 @@ package edu.hectorrodriguez.apiphysiocare.data
 import android.util.Log
 import edu.hectorrodriguez.apiphysiocare.model.LoginRequest
 import edu.hectorrodriguez.apiphysiocare.model.LoginResponse
+import edu.hectorrodriguez.apiphysiocare.model.appointements.AppointementResponse
 import edu.hectorrodriguez.apiphysiocare.model.appointements.AppointementsResponse
+import edu.hectorrodriguez.apiphysiocare.model.physios.PhysioIdResponse
 
 class RemoteDataSource {
     private val TAG = RemoteDataSource::class.java.simpleName
@@ -46,6 +48,45 @@ class RemoteDataSource {
             val errorBody = response.errorBody()?.string()
             Log.e(TAG, "Error :${response.message()} | $errorBody")
             throw  Exception("Error al obeneter appointements: ${response.message()}")
+        }
+    }
+
+    //Funcion para obtener un appointement desde el id del appointement
+    suspend fun fecthAppointmentsById(token: String,id:String): AppointementResponse{
+        val response = api.getAppointmentById("Bearer $token",id)
+        if(response.isSuccessful){
+            Log.e(TAG, "Obtenido appointment")
+            return response.body() ?: throw Exception("Respuesta vacía del servidor")
+        }else{
+            val errorBody = response.errorBody()?.string()
+            Log.e(TAG, "Error :${response.message()} | $errorBody")
+            throw  Exception("Error al obeneter appointement: ${response.message()}")
+        }
+    }
+
+    //Coger un physio por id
+    suspend fun fecthPhysioById(token: String,id:String): PhysioIdResponse{
+        val response = api.getPhysioById("Bearer $token",id)
+        if(response.isSuccessful){
+            Log.e(TAG, "Obtenido physio")
+            return response.body() ?: throw Exception("Respuesta vacía del servidor")
+        }else{
+            val errorBody = response.errorBody()?.string()
+            Log.e(TAG, "Error :${response.message()} | $errorBody")
+            throw  Exception("Error al obeneter physio: ${response.message()}")
+        }
+    }
+
+    //Funcion para borrar un appointment by id
+    suspend fun deleteAppointment(token: String,id:String): Boolean{
+        val response = api.deleteAppointment("Bearer $token",id)
+        if(response.isSuccessful){
+            Log.e(TAG, "Eliminado appointment")
+            return true
+        }else{
+            val errorBody = response.errorBody()?.string()
+            Log.e(TAG, "Error :${response.message()} | $errorBody")
+            throw  Exception("Error al eliminar appointement: ${response.message()}")
         }
     }
 }

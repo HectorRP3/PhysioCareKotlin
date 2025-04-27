@@ -5,17 +5,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.viewModels
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import edu.hectorrodriguez.apiphysiocare.R
-import edu.hectorrodriguez.apiphysiocare.data.Repository
 import edu.hectorrodriguez.apiphysiocare.databinding.AppointementFragmentBinding
-import edu.hectorrodriguez.apiphysiocare.ui.main.AppointementAdapter
+import edu.hectorrodriguez.apiphysiocare.ui.adapter.AppointementAdapter
+import edu.hectorrodriguez.apiphysiocare.ui.detailAppointment.DetailAppointmentActivity
 import edu.hectorrodriguez.apiphysiocare.ui.main.MainViewModel
 import edu.hectorrodriguez.apiphysiocare.utils.checkConnection
+import edu.hectorrodriguez.apiphysiocare.utils.isPhysio
 import edu.hectorrodriguez.apiphysiocare.utils.pastAppointments
 import kotlinx.coroutines.launch
 import java.time.Instant
@@ -29,10 +29,22 @@ class FragmentAppointment: Fragment()  {
     private val adapter by lazy {
         AppointementAdapter(
             onAppointementClick = { appointement ->
-                Log.d(TAG, "onClick: ${appointement}")
+                if(pastAppointments){
+                    Log.d(TAG, "onClick: ${appointement}")
+                    DetailAppointmentActivity.navigate(requireActivity(), appointement)
+                }else{
+                    Toast.makeText(requireContext(), "No se puede acceder a las citas futuras", Toast.LENGTH_SHORT).show()
+                }
             },
-
-            )
+            onDeleteClick = {
+                if(isPhysio){
+                    sharedViewModel.deleteAppointement(it)
+                    showAppointments()
+                }else{
+                    Toast.makeText(requireContext(), "No se puede eliminar la cita", Toast.LENGTH_SHORT).show()
+                }
+            }
+        )
     }
      override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,7 +62,6 @@ class FragmentAppointment: Fragment()  {
         binding.mRecycler.layoutManager= LinearLayoutManager(context)
         binding.mRecycler.adapter = adapter
         showAppointments()
-
     }
 
     override fun onStart() {
@@ -67,6 +78,7 @@ class FragmentAppointment: Fragment()  {
     override fun onPause() {
         super.onPause()
         Log.i(TAG, "onPause")
+        adapter.submitList(emptyList())
     }
 
     override fun onDestroy() {

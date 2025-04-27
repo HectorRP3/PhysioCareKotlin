@@ -24,3 +24,4 @@ fun  checkConnection(context: Context) : Boolean{
 }
 
 var pastAppointments = true
+var isPhysio = false

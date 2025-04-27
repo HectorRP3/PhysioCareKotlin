@@ -3,7 +3,9 @@ package edu.hectorrodriguez.apiphysiocare.data
 import android.util.Log
 import edu.hectorrodriguez.apiphysiocare.model.LoginRequest
 import edu.hectorrodriguez.apiphysiocare.model.LoginResponse
+import edu.hectorrodriguez.apiphysiocare.model.appointements.AppointementResponse
 import edu.hectorrodriguez.apiphysiocare.model.appointements.AppointementsResponse
+import edu.hectorrodriguez.apiphysiocare.model.physios.PhysioIdResponse
 import edu.hectorrodriguez.apiphysiocare.utils.SessionManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -63,9 +65,36 @@ class Repository(private val sessionManager: SessionManager){
         }catch (e:Exception){
          return null
         }
-
-
     }
 
+    suspend fun fecthAppointemenById(token:String,id:String) : AppointementResponse? {
+        lateinit var response: AppointementResponse
+        try{
+                response = remoteDataSource.fecthAppointmentsById(token, id)
+                return response
+        }catch (e:Exception){
+            return null
+        }
+    }
+
+    suspend fun fecthPhysioById(token:String,id:String) : PhysioIdResponse? {
+        lateinit var response: PhysioIdResponse
+        try{
+            response = remoteDataSource.fecthPhysioById(token, id)
+            return response
+        }catch (e:Exception){
+            return null
+        }
+    }
+
+    //delte appointment by id
+    suspend fun deleteAppointement(token:String,id:String) : Boolean {
+        try{
+            remoteDataSource.deleteAppointment(token, id)
+            return true
+        }catch (e:Exception){
+            return false
+        }
+    }
 
 }
