@@ -6,6 +6,9 @@ import edu.hectorrodriguez.apiphysiocare.model.LoginResponse
 import edu.hectorrodriguez.apiphysiocare.model.appointements.AppointementResponse
 import edu.hectorrodriguez.apiphysiocare.model.appointements.AppointementsResponse
 import edu.hectorrodriguez.apiphysiocare.model.physios.PhysioIdResponse
+import edu.hectorrodriguez.apiphysiocare.model.records.RecordItemWithPatient
+import edu.hectorrodriguez.apiphysiocare.model.records.RecordRespWithPatient
+import edu.hectorrodriguez.apiphysiocare.model.records.RecordResponseWithPatient
 
 class RemoteDataSource {
     private val TAG = RemoteDataSource::class.java.simpleName
@@ -22,6 +25,44 @@ class RemoteDataSource {
             val errorBody = response.errorBody()?.string()
             Log.e(TAG, "Error :${response.message()} | $errorBody")
             throw  Exception("Error en login: ${response.message()}")
+        }
+    }
+
+    //Funcion para obtener todos los recordsç
+    suspend fun fechthRecords(token:String) : RecordResponseWithPatient{
+        val response = api.getRecords("Bearer $token")
+        if(response.isSuccessful){
+            Log.e(TAG, "Obtenidos records")
+            return response.body() ?: throw Exception("Respuesta vacía del servidor")
+        }else{
+            val errorBody = response.errorBody()?.string()
+            Log.e(TAG, "Error :${response.message()} | $errorBody")
+            throw  Exception("Error al obeneter records: ${response.message()}")
+        }
+    }
+
+    suspend fun fecthRecordById(token: String,id:String): RecordRespWithPatient{
+        val response = api.getRecordsById("Bearer $token",id)
+        if(response.isSuccessful){
+            Log.e(TAG, "Obtenido records")
+            return response.body() ?: throw Exception("Respuesta vacía del servidor")
+        }else{
+            val errorBody = response.errorBody()?.string()
+            Log.e(TAG, "Error :${response.message()} | $errorBody")
+            throw  Exception("Error al Obtener records: ${response.message()}")
+        }
+    }
+
+    //Funcion para obtener appointments desde el id del record
+    suspend fun fechthAppointementsByIdRecord(token:String,id:String) : AppointementsResponse{
+        val response = api.getAppointmentsByIdRecord("Bearer $token",id)
+        if(response.isSuccessful){
+            Log.e(TAG, "Obtenidos appointments del record")
+            return response.body() ?: throw Exception("Respuesta vacía del servidor")
+        }else{
+            val errorBody = response.errorBody()?.string()
+            Log.e(TAG, "Error :${response.message()} | $errorBody")
+            throw  Exception("Error al obeneter appointements: ${response.message()}")
         }
     }
 
@@ -89,4 +130,5 @@ class RemoteDataSource {
             throw  Exception("Error al eliminar appointement: ${response.message()}")
         }
     }
+
 }

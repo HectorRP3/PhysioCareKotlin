@@ -46,39 +46,11 @@
                     android:id="@+id/titileAppointme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Appoinemt"
+                    android:text="Record"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                    app:layout_constraintBottom_toTopOf="@+id/tvDate"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <TextView
-                    android:id="@+id/tvDate"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="TextView"
-                    app:layout_constraintTop_toBottomOf="@+id/titileAppointme"
-                    tools:layout_editor_absoluteX="20dp" />
-
-                <TextView
-                    android:id="@+id/tvDiagnosis"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="TextView"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvDate" />
-
-                <TextView
-                    android:id="@+id/tvTreatment"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="TextView"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvDiagnosis" />
+                    tools:layout_editor_absoluteY="20dp" />
 
                 <TextView
                     android:id="@+id/tvObservation"
@@ -89,7 +61,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvTreatment" />
+                    app:layout_constraintTop_toBottomOf="@+id/titileAppointme" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.cardview.widget.CardView>
@@ -109,7 +81,7 @@
                     android:id="@+id/textView17"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Physio"
+                    android:text="Patient"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                     tools:layout_editor_absoluteX="20dp"
                     tools:layout_editor_absoluteY="20dp" />
@@ -124,7 +96,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView17" />
 
                 <TextView
-                    android:id="@+id/tvSurname"
+                    android:id="@+id/tvBirthdate"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="TextView"
@@ -133,22 +105,13 @@
                     app:layout_constraintTop_toBottomOf="@+id/tvNombreP" />
 
                 <TextView
-                    android:id="@+id/tvSpecialty"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="TextView"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvSurname" />
-
-                <TextView
                     android:id="@+id/tvLicenseNumber"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="TextView"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvSpecialty" />
+                    app:layout_constraintTop_toBottomOf="@+id/tvBirthdate" />
 
                 <TextView
                     android:id="@+id/tvEmail"
@@ -162,6 +125,17 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.cardview.widget.CardView>
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/mRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_appointments" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

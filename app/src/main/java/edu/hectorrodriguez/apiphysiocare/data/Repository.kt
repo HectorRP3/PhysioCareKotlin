@@ -6,6 +6,9 @@ import edu.hectorrodriguez.apiphysiocare.model.LoginResponse
 import edu.hectorrodriguez.apiphysiocare.model.appointements.AppointementResponse
 import edu.hectorrodriguez.apiphysiocare.model.appointements.AppointementsResponse
 import edu.hectorrodriguez.apiphysiocare.model.physios.PhysioIdResponse
+import edu.hectorrodriguez.apiphysiocare.model.records.RecordRespWithPatient
+import edu.hectorrodriguez.apiphysiocare.model.records.RecordResponse
+import edu.hectorrodriguez.apiphysiocare.model.records.RecordResponseWithPatient
 import edu.hectorrodriguez.apiphysiocare.utils.SessionManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -41,6 +44,28 @@ class Repository(private val sessionManager: SessionManager){
     suspend fun logout(){
         sessionManager.clearSession()
     }
+
+
+    ////////// Records ///////////
+    suspend fun fetchRecords(token:String): RecordResponseWithPatient{
+        lateinit var response: RecordResponseWithPatient
+        response = remoteDataSource.fechthRecords(token)
+
+        return response
+    }
+
+    suspend fun fetchRecordById(token: String,id: String): RecordRespWithPatient{
+        var response = remoteDataSource.fecthRecordById(token,id)
+        return response
+    }
+
+    //Funcion para obtener appointments desde el id del record
+    suspend fun fetchAppointementsByIdRecord(token:String,id:String) : AppointementsResponse{
+        lateinit var response: AppointementsResponse
+        response = remoteDataSource.fechthAppointementsByIdRecord(token, id)
+        return response
+    }
+
 
     ////////// Appointements ///////////
     /**

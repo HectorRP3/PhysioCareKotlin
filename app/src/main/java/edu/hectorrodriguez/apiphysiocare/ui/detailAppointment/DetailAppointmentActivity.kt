@@ -97,7 +97,7 @@ class DetailAppointmentActivity : AppCompatActivity() {
                         binding.tvDate.text = getString(R.string.dia, resultado)
                         binding.tvDiagnosis.text =
                             getString(R.string.diagnosis, appointment.diagnosis)
-                        binding.tvObservations.text =
+                        binding.tvObservation.text =
                             getString(R.string.observations, appointment.observations)
                         binding.tvTreatment.text =
                             getString(R.string.treatment, appointment.treatment)

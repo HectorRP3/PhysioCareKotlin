@@ -9,6 +9,8 @@ import edu.hectorrodriguez.apiphysiocare.model.LoginRequest
 import edu.hectorrodriguez.apiphysiocare.model.LoginState
 import edu.hectorrodriguez.apiphysiocare.model.appointements.AppointementsResponse
 import edu.hectorrodriguez.apiphysiocare.model.appointements.Appointments
+import edu.hectorrodriguez.apiphysiocare.model.records.RecordResponseWithPatient
+import edu.hectorrodriguez.apiphysiocare.model.records.RecordsWithPatient
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
@@ -89,6 +91,26 @@ class MainViewModel(private val repository: Repository): ViewModel() {
             }
         }
     }
+    //////////// Records /////////////////
+    private val _recordsState= MutableStateFlow(RecordsWithPatient())
+    val recordState: MutableStateFlow<RecordsWithPatient>
+        get() = _recordsState
+    fun getRecords(){
+        viewModelScope.launch {
+            val token = repository.getSessionFlowUser().first().first
+            Log.i(TAG," Token: $token")
+            if (token != null) {
+                var recordAux: RecordResponseWithPatient =
+                    repository.fetchRecords(token)
+                    _recordsState.value = recordAux.records
+                Log.i(TAG," Record: ${_recordsState.value}")
+            } else {
+                _appointementsState.value = Appointments()
+            }
+        }
+    }
+
+
     //////////// Fragment Showed ////////////
     private var _fragmentShowed: String? = null
 
