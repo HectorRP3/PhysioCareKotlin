@@ -48,12 +48,15 @@ class DetailRecordViewModel(private val repository: Repository,private val idRec
         }
     }
 
+
     fun deleteAppointement(id: String) {
         viewModelScope.launch {
             val token = repository.getSessionFlowUser().first().first
             Log.i(TAG," Token: $token")
             if (token != null) {
                 repository.deleteAppointement(token, id)
+                Log.i(TAG," Appointements: ${_appointementsState.value}")
+                getAppointmentById()
                 Log.i(TAG," Appointements: ${_appointementsState.value}")
             } else {
                 _appointementsState.value = Appointments()

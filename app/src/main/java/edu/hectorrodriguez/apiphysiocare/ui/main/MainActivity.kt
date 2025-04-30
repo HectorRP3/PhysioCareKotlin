@@ -25,6 +25,7 @@ import edu.hectorrodriguez.apiphysiocare.utils.SessionManager
 import edu.hectorrodriguez.apiphysiocare.utils.checkConnection
 import edu.hectorrodriguez.apiphysiocare.utils.dataStore
 import edu.hectorrodriguez.apiphysiocare.utils.isPhysio
+import edu.hectorrodriguez.apiphysiocare.utils.isRecord
 import edu.hectorrodriguez.apiphysiocare.utils.pastAppointments
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -72,7 +73,11 @@ class MainActivity : AppCompatActivity() {
                     unBlockRolButtonsPhysios()
                     isPhysio = true
                 }
-                loadFragment(appointementFragment)
+                if(isRecord){
+                    loadFragment(recordFragment)
+                }else{
+                    loadFragment(appointementFragment)
+                }
             }
         }
 
@@ -113,12 +118,15 @@ class MainActivity : AppCompatActivity() {
         binding.mBottomNavView.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.btnRecords -> {
+                    isRecord = true
                     Log.d(TAG, "btnRecords")
                     loadFragment(recordFragment)
                     true
                 }
                 R.id.btnPastAppointments -> {
                     Log.d(TAG, "btnProfile")
+                    isRecord = false
+
                     pastAppointments=true
                     appointementFragment = FragmentAppointment()
                     loadFragment(appointementFragment)
@@ -128,6 +136,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.btnFutureAppointments -> {
                     Log.d(TAG, "btnProfile")
                     pastAppointments=false
+                    isRecord = false
                     appointementFragment = FragmentAppointment()
                     loadFragment(appointementFragment)
                     Log.d(TAG, "pastAppointments: $pastAppointments")

@@ -4,8 +4,11 @@ import edu.hectorrodriguez.apiphysiocare.model.LoginRequest
 import edu.hectorrodriguez.apiphysiocare.model.LoginResponse
 import edu.hectorrodriguez.apiphysiocare.model.appointements.AppointementResponse
 import edu.hectorrodriguez.apiphysiocare.model.appointements.AppointementsResponse
+import edu.hectorrodriguez.apiphysiocare.model.appointements.AppointmentsRequest
 import edu.hectorrodriguez.apiphysiocare.model.physios.PhysioIdResponse
+import edu.hectorrodriguez.apiphysiocare.model.records.RecordResp
 import edu.hectorrodriguez.apiphysiocare.model.records.RecordRespWithPatient
+import edu.hectorrodriguez.apiphysiocare.model.records.RecordResponse
 import edu.hectorrodriguez.apiphysiocare.model.records.RecordResponseWithPatient
 import retrofit2.Response
 import retrofit2.http.Body
@@ -44,6 +47,10 @@ interface Retrofit2ApiInterface {
 
     @GET("records/{id}/appointments")
     suspend fun getAppointmentsByIdRecord(@Header("Authorization") token: String,@Path("id") id: String): Response<AppointementsResponse>
+
+    @POST("records/appointments/{id}")
+    @Headers("Content-Type: application/json")
+    suspend fun createAppointment(@Header("Authorization") token: String, @Path("id") id: String, @Body appointment: AppointmentsRequest): Response<RecordResp>
 
     @GET("records/appointments/patients/{id}")
     suspend fun getAppointmentsByIdPateint(@Header("Authorization") token: String, @Path("id") id: String): Response<AppointementsResponse>

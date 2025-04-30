@@ -16,4 +16,6 @@
     <string name="title_cita">Detalles de la cita</string>
     <string name="patient">Patient</string>
     <string name="record">Record</string>
+    <string name="campo_requerido">Campo requerido</string>
+    <string name="error_cita">Error no se ha podido añadir la cita</string>
 </resources>

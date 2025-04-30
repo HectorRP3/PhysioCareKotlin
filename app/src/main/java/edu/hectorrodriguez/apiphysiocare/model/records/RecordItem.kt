@@ -20,6 +20,10 @@ data class RecordResponse(
     @SerializedName("ok") val ok: Boolean,
     @SerializedName("resultado") val records: Records,
 )
+data class RecordResp(
+    @SerializedName("ok") val ok: Boolean,
+    @SerializedName("resultado") val records: RecordItem,
+)
 
 data class RecordItemWithPatient(
     @SerializedName("_id")

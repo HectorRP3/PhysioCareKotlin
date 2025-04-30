@@ -5,8 +5,10 @@ import edu.hectorrodriguez.apiphysiocare.model.LoginRequest
 import edu.hectorrodriguez.apiphysiocare.model.LoginResponse
 import edu.hectorrodriguez.apiphysiocare.model.appointements.AppointementResponse
 import edu.hectorrodriguez.apiphysiocare.model.appointements.AppointementsResponse
+import edu.hectorrodriguez.apiphysiocare.model.appointements.AppointmentsRequest
 import edu.hectorrodriguez.apiphysiocare.model.physios.PhysioIdResponse
 import edu.hectorrodriguez.apiphysiocare.model.records.RecordItemWithPatient
+import edu.hectorrodriguez.apiphysiocare.model.records.RecordResp
 import edu.hectorrodriguez.apiphysiocare.model.records.RecordRespWithPatient
 import edu.hectorrodriguez.apiphysiocare.model.records.RecordResponseWithPatient
 
@@ -25,6 +27,19 @@ class RemoteDataSource {
             val errorBody = response.errorBody()?.string()
             Log.e(TAG, "Error :${response.message()} | $errorBody")
             throw  Exception("Error en login: ${response.message()}")
+        }
+    }
+
+    //Funcion para crear un appointment
+    suspend fun createAppointment(token: String,id:String, appointment: AppointmentsRequest): RecordResp{
+        val response = api.createAppointment("Bearer $token",id,appointment)
+        if(response.isSuccessful){
+            Log.e(TAG, "Creado appointment")
+            return response.body() ?: throw Exception("Respuesta vacía del servidor")
+        }else{
+            val errorBody = response.errorBody()?.string()
+            Log.e(TAG, "Error :${response.message()} | $errorBody")
+            throw  Exception("Error al crear appointement: ${response.message()}")
         }
     }
 

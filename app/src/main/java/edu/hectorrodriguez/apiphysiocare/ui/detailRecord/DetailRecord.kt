@@ -12,7 +12,9 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import edu.hectorrodriguez.apiphysiocare.R
 import edu.hectorrodriguez.apiphysiocare.data.Repository
 import edu.hectorrodriguez.apiphysiocare.databinding.ActivityDetailRecordBinding
@@ -21,6 +23,9 @@ import edu.hectorrodriguez.apiphysiocare.ui.detailAppointment.DetailAppointmentA
 import edu.hectorrodriguez.apiphysiocare.ui.detailAppointment.DetailAppointmentActivity.Companion.APPOINTMENT_ID
 import edu.hectorrodriguez.apiphysiocare.ui.detailAppointment.DetailAppointmentViewModel
 import edu.hectorrodriguez.apiphysiocare.ui.detailAppointment.DetailAppointmentViewModelFactory
+import edu.hectorrodriguez.apiphysiocare.ui.formAppointement.AddAppointementActivity
+import edu.hectorrodriguez.apiphysiocare.ui.login.LoginActivity
+import edu.hectorrodriguez.apiphysiocare.ui.main.MainActivity
 import edu.hectorrodriguez.apiphysiocare.utils.SessionManager
 import edu.hectorrodriguez.apiphysiocare.utils.checkConnection
 import edu.hectorrodriguez.apiphysiocare.utils.dataStore
@@ -64,7 +69,6 @@ class DetailRecord : AppCompatActivity() {
             },
             onDeleteClick = {
                 vm.deleteAppointement(it)
-                showAppointments()
             }
         )
     }
@@ -81,9 +85,11 @@ class DetailRecord : AppCompatActivity() {
 
         binding.mToolbar.setTitle("Detalles del record")
         binding.mRecycler.adapter = adapter
+        binding.mToolbar.inflateMenu(R.menu.menu_add)
 
         runCatching {
             vm.getRecordById()
+            vm.getAppointmentById()
         }.onFailure {
             if(vm.record.value==null){
                 Toast.makeText(
@@ -96,9 +102,27 @@ class DetailRecord : AppCompatActivity() {
     }
     override fun onStart() {
         super.onStart()
+        vm.getAppointmentById()
+        showAppointments()
+        binding.mToolbar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.btnAdd-> {
+                    Log.i(TAG, "onMenuItemClick: ${it.itemId}")
+                    var recordid = intent.getStringExtra(RECORD_ID).toString()
+                    AddAppointementActivity.navigate(this@DetailRecord,recordid)
+                    true
+                }
+                else -> {
+                    false
+                }
+            }
+        }
+
+
         if (checkConnection(this)) {
             lifecycleScope.launch {
                 showAppointments()
+                vm.getAppointmentById()
                 vm.record.collect {
                     if (it != null) {
                         Log.e("TAG", "onStart: ${it.medicalRecord}")
@@ -127,18 +151,24 @@ class DetailRecord : AppCompatActivity() {
             }
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        Log.e(TAG, "onResume: ")
+        vm.getAppointmentById()
+        showAppointments()
+    }
     private fun showAppointments(){
         adapter.submitList(emptyList())
         if(checkConnection(this)) {
             lifecycleScope.launch {
                 vm.getAppointmentById()
                 vm.appointementsState.collect {
-                    Log.d(TAG, "showAppointments: ${it}")
+                    Log.e(TAG, "showAppointments: ${it}")
                         adapter.submitList(it)
                     }
 
                 }
             }
         }
-
-    }
+}

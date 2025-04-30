@@ -5,7 +5,9 @@ import edu.hectorrodriguez.apiphysiocare.model.LoginRequest
 import edu.hectorrodriguez.apiphysiocare.model.LoginResponse
 import edu.hectorrodriguez.apiphysiocare.model.appointements.AppointementResponse
 import edu.hectorrodriguez.apiphysiocare.model.appointements.AppointementsResponse
+import edu.hectorrodriguez.apiphysiocare.model.appointements.AppointmentsRequest
 import edu.hectorrodriguez.apiphysiocare.model.physios.PhysioIdResponse
+import edu.hectorrodriguez.apiphysiocare.model.records.RecordResp
 import edu.hectorrodriguez.apiphysiocare.model.records.RecordRespWithPatient
 import edu.hectorrodriguez.apiphysiocare.model.records.RecordResponse
 import edu.hectorrodriguez.apiphysiocare.model.records.RecordResponseWithPatient
@@ -43,6 +45,22 @@ class Repository(private val sessionManager: SessionManager){
      */
     suspend fun logout(){
         sessionManager.clearSession()
+    }
+
+    ////////// Appointement CREAR ///////////
+
+    /**
+     * Funcion para crear un appointment
+     * @param token Token de la sesión
+     * @param id Id del usuario
+     * @param appointment Objeto AppointmentsRequest con los datos del appointment
+     * @return Devuelve un objeto RecordResp con el appointment creado o null si ha habido un error
+     * @author Héctor Rodríguez Planelles
+     */
+    suspend fun createAppointment(token: String,id:String, appointment: AppointmentsRequest): RecordResp {
+        lateinit var response: RecordResp
+        response = remoteDataSource.createAppointment(token, id, appointment)
+        return response
     }
 
 
