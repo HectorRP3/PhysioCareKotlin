@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -15,10 +16,13 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import edu.hectorrodriguez.apiphysiocare.databinding.AppointementFragmentBinding
 import edu.hectorrodriguez.apiphysiocare.databinding.RecordFragmentBinding
+import edu.hectorrodriguez.apiphysiocare.model.records.RecordsWithPatient
 import edu.hectorrodriguez.apiphysiocare.ui.adapter.RecordAdapter
 import edu.hectorrodriguez.apiphysiocare.ui.detailRecord.DetailRecord
+import edu.hectorrodriguez.apiphysiocare.ui.login.LoginActivity
 import edu.hectorrodriguez.apiphysiocare.ui.main.MainViewModel
 import edu.hectorrodriguez.apiphysiocare.utils.checkConnection
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
@@ -86,6 +90,19 @@ class FragmentRecord: Fragment() {
     override fun onResume() {
         super.onResume()
         Log.i(TAG, "onResume")
+        runCatching {
+            lifecycleScope.launch {
+                    showRecords()
+                delay(800)
+                if(adapter.currentList.isEmpty()){
+                    sharedViewModel.logout()
+                    LoginActivity.navigate(requireActivity())
+                }
+            }
+        }.onFailure {
+            sharedViewModel.logout()
+            LoginActivity.navigate(requireActivity())
+        }
     }
 
     override fun onPause() {
@@ -100,25 +117,28 @@ class FragmentRecord: Fragment() {
 
     private fun showRecords(busqueda:String=""){
         adapter.submitList(emptyList())
-        if(checkConnection(requireContext())) {
-            lifecycleScope.launch {
-                if(busqueda.isBlank()){
-                    sharedViewModel.getRecords()
-                    sharedViewModel.recordState.collect {
-                        adapter.submitList(it)
-                    }
-                }else{
-                    sharedViewModel.getRecords()
-                    sharedViewModel.recordState.collect {
-                        adapter.submitList(it.filter { d-> d.patient?.name?.toLowerCase()?.contains(query!!) == true ||d.patient?.insuranceNumber?.toLowerCase()?.contains(query!!) ==true
-                        })
+        try{
+            if(checkConnection(requireContext())) {
+                lifecycleScope.launch {
+                    if(busqueda.isBlank()){
+                        sharedViewModel.getRecords()
+                        sharedViewModel.recordState.collect {
+                            adapter.submitList(it)
+                        }
+                    }else{
+                        sharedViewModel.getRecords()
+                        sharedViewModel.recordState.collect {
+                            adapter.submitList(it?.filter { d-> d.patient?.name?.toLowerCase()?.contains(query!!) == true ||d.patient?.insuranceNumber?.toLowerCase()?.contains(query!!) ==true
+                            })
+                        }
                     }
                 }
-
-
-
             }
+        }catch (e:Exception){
+            sharedViewModel.logout()
+            LoginActivity.navigate(requireActivity())
         }
+
     }
 
 }

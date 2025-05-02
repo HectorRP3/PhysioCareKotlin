@@ -46,11 +46,11 @@ class AddAppointmentViewModel(private val repository: Repository,private val idR
                         treatment
                     )
                 )
-                if (response.ok) {
+                if (response?.ok == true) {
                     Log.d(TAG, "addAppointemnt: Appointment created successfully")
                     Log.d(TAG, "addAppointemnt: Appointment created successfully")
                 } else {
-                    Log.e(TAG, "addAppointemnt: ${response.records}")
+                    Log.e(TAG, "addAppointemnt: ${response?.records}")
                 }
             }else{
                 Log.e(TAG, "addAppointemnt: Token is null")

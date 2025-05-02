@@ -31,7 +31,7 @@ class RemoteDataSource {
     }
 
     //Funcion para crear un appointment
-    suspend fun createAppointment(token: String,id:String, appointment: AppointmentsRequest): RecordResp{
+    suspend fun createAppointment(token: String,id:String, appointment: AppointmentsRequest): RecordResp?{
         val response = api.createAppointment("Bearer $token",id,appointment)
         if(response.isSuccessful){
             Log.e(TAG, "Creado appointment")
@@ -39,7 +39,7 @@ class RemoteDataSource {
         }else{
             val errorBody = response.errorBody()?.string()
             Log.e(TAG, "Error :${response.message()} | $errorBody")
-            throw  Exception("Error al crear appointement: ${response.message()}")
+return null
         }
     }
 
@@ -56,7 +56,7 @@ class RemoteDataSource {
         }
     }
 
-    suspend fun fecthRecordById(token: String,id:String): RecordRespWithPatient{
+    suspend fun fecthRecordById(token: String,id:String): RecordRespWithPatient?{
         val response = api.getRecordsById("Bearer $token",id)
         if(response.isSuccessful){
             Log.e(TAG, "Obtenido records")
@@ -64,12 +64,12 @@ class RemoteDataSource {
         }else{
             val errorBody = response.errorBody()?.string()
             Log.e(TAG, "Error :${response.message()} | $errorBody")
-            throw  Exception("Error al Obtener records: ${response.message()}")
+            return null
         }
     }
 
     //Funcion para obtener appointments desde el id del record
-    suspend fun fechthAppointementsByIdRecord(token:String,id:String) : AppointementsResponse{
+    suspend fun fechthAppointementsByIdRecord(token:String,id:String) : AppointementsResponse?{
         val response = api.getAppointmentsByIdRecord("Bearer $token",id)
         if(response.isSuccessful){
             Log.e(TAG, "Obtenidos appointments del record")
@@ -77,7 +77,7 @@ class RemoteDataSource {
         }else{
             val errorBody = response.errorBody()?.string()
             Log.e(TAG, "Error :${response.message()} | $errorBody")
-            throw  Exception("Error al obeneter appointements: ${response.message()}")
+            return null
         }
     }
 

@@ -58,24 +58,29 @@ class MainViewModel(private val repository: Repository): ViewModel() {
      * @author Héctor Rodríguez Planelles
      */
     fun getAllAppointements() {
-        viewModelScope.launch {
-            val token = repository.getSessionFlowUser().first().first
-            Log.i(TAG," Token: $token")
-            val id = repository.getSessionFlowUser().first().second
-            Log.i(TAG," Id: $id")
-            val rol = repository.getSessionFlowRol().first().second
-            Log.i(TAG," Rol: $rol")
-            if (token != null) {
-                val appointementsAux = repository.fetchAppointements(token, id.toString(), rol.toString())
-                if(appointementsAux != null){
-                    _appointementsState.value = appointementsAux.appointments
-                }else{
+        try{
+            viewModelScope.launch {
+                val token = repository.getSessionFlowUser().first().first
+                Log.i(TAG," Token: $token")
+                val id = repository.getSessionFlowUser().first().second
+                Log.i(TAG," Id: $id")
+                val rol = repository.getSessionFlowRol().first().second
+                Log.i(TAG," Rol: $rol")
+                if (token != null) {
+                    val appointementsAux = repository.fetchAppointements(token, id.toString(), rol.toString())
+                    if(appointementsAux != null){
+                        _appointementsState.value = appointementsAux.appointments
+                    }else{
+                        _appointementsState.value = Appointments()
+                    }
+                    Log.i(TAG," Appointements: ${_appointementsState.value}")
+                } else {
                     _appointementsState.value = Appointments()
                 }
-                Log.i(TAG," Appointements: ${_appointementsState.value}")
-            } else {
-                _appointementsState.value = Appointments()
             }
+        }catch (e:Exception){
+            logout()
+            appointementsState.value = Appointments()
         }
     }
     //delete appointement by id
@@ -92,20 +97,20 @@ class MainViewModel(private val repository: Repository): ViewModel() {
         }
     }
     //////////// Records /////////////////
-    private val _recordsState= MutableStateFlow(RecordsWithPatient())
-    val recordState: MutableStateFlow<RecordsWithPatient>
+    private val _recordsState= MutableStateFlow<RecordsWithPatient?>(null)
+    val recordState: MutableStateFlow<RecordsWithPatient?>
         get() = _recordsState
     fun getRecords(){
         viewModelScope.launch {
             val token = repository.getSessionFlowUser().first().first
             Log.i(TAG," Token: $token")
             if (token != null) {
-                var recordAux: RecordResponseWithPatient =
+                var recordAux: RecordResponseWithPatient? =
                     repository.fetchRecords(token)
-                    _recordsState.value = recordAux.records
+                _recordsState.value = recordAux?.records
                 Log.i(TAG," Record: ${_recordsState.value}")
             } else {
-                _appointementsState.value = Appointments()
+                _recordsState.value = RecordsWithPatient()
             }
         }
     }

@@ -1,5 +1,6 @@
 package edu.hectorrodriguez.apiphysiocare.ui.fragment
 
+import android.R
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,10 +14,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import edu.hectorrodriguez.apiphysiocare.databinding.AppointementFragmentBinding
 import edu.hectorrodriguez.apiphysiocare.ui.adapter.AppointementAdapter
 import edu.hectorrodriguez.apiphysiocare.ui.detailAppointment.DetailAppointmentActivity
+import edu.hectorrodriguez.apiphysiocare.ui.login.LoginActivity
 import edu.hectorrodriguez.apiphysiocare.ui.main.MainViewModel
 import edu.hectorrodriguez.apiphysiocare.utils.checkConnection
 import edu.hectorrodriguez.apiphysiocare.utils.isPhysio
 import edu.hectorrodriguez.apiphysiocare.utils.pastAppointments
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.Instant
 import java.time.ZoneOffset
@@ -73,6 +76,19 @@ class FragmentAppointment: Fragment()  {
     override fun onResume() {
         super.onResume()
         Log.i(TAG, "onResume")
+        runCatching {
+            lifecycleScope.launch {
+                showAppointments()
+                delay(800)
+                if(adapter.currentList.isEmpty()){
+                    sharedViewModel.logout()
+                    LoginActivity.navigate(requireActivity())
+                }
+            }
+        }.onFailure {
+            sharedViewModel.logout()
+            LoginActivity.navigate(requireActivity())
+        }
     }
 
     override fun onPause() {
@@ -108,7 +124,6 @@ class FragmentAppointment: Fragment()  {
                         }
                         adapter.submitList(appointementPast)
                     }
-
                 }
             }
         }

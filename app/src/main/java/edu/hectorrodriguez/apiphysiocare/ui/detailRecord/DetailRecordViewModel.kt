@@ -27,14 +27,14 @@ class DetailRecordViewModel(private val repository: Repository,private val idRec
             val token = repository.getSessionFlowUser().first().first
             if(token!=null){
                 val recordAux = repository.fetchRecordById(token,idRecord)
-                _record.value = recordAux.records
+                _record.value = recordAux?.records
                 Log.i(TAG,"RECORDDDD ${_record.value}")
             }
         }
     }
 
-    private val _appointementsState = MutableStateFlow(Appointments())
-    val appointementsState: MutableStateFlow<Appointments>
+    private val _appointementsState = MutableStateFlow<Appointments?>(Appointments())
+    val appointementsState: MutableStateFlow<Appointments?>
         get() = _appointementsState
 
     fun getAppointmentById(){
@@ -42,12 +42,18 @@ class DetailRecordViewModel(private val repository: Repository,private val idRec
             val token = repository.getSessionFlowUser().first().first
             if(token!=null){
                 val appointementAux = repository.fetchAppointementsByIdRecord(token,idRecord)
-                _appointementsState.value = appointementAux.appointments
+                _appointementsState.value = appointementAux?.appointments
                 Log.i(TAG,"APPOINTMENT ${_appointementsState.value}")
             }
         }
     }
 
+    //Función para cerrar sesión
+    fun logout() {
+        viewModelScope.launch {
+            repository.logout()
+        }
+    }
 
     fun deleteAppointement(id: String) {
         viewModelScope.launch {

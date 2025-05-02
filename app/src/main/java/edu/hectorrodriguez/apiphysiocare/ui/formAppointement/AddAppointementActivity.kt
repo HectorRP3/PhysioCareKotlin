@@ -80,7 +80,12 @@ class AddAppointementActivity : AppCompatActivity() {
                 binding.tietTreatment.error = getString(R.string.campo_requerido)
                 return@setOnClickListener
             }
-
+            val dateArray = date.split("/")
+            Log.i(TAG,"dateArray: $dateArray")
+            if(dateArray[0] > 12.toString() && dateArray[1] > 31.toString()){
+                binding.etDate.error = getString(R.string.fecha_incorrecya)
+                return@setOnClickListener
+            }
             vm.addAppointemnt(
                     date,
                     diagnosis,

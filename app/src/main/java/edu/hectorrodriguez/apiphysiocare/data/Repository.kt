@@ -57,29 +57,33 @@ class Repository(private val sessionManager: SessionManager){
      * @return Devuelve un objeto RecordResp con el appointment creado o null si ha habido un error
      * @author Héctor Rodríguez Planelles
      */
-    suspend fun createAppointment(token: String,id:String, appointment: AppointmentsRequest): RecordResp {
-        lateinit var response: RecordResp
+    suspend fun createAppointment(token: String,id:String, appointment: AppointmentsRequest): RecordResp? {
+         var response: RecordResp?
         response = remoteDataSource.createAppointment(token, id, appointment)
         return response
     }
 
 
     ////////// Records ///////////
-    suspend fun fetchRecords(token:String): RecordResponseWithPatient{
-        lateinit var response: RecordResponseWithPatient
-        response = remoteDataSource.fechthRecords(token)
-
-        return response
+    suspend fun fetchRecords(token:String): RecordResponseWithPatient?{
+        try{
+            lateinit var response: RecordResponseWithPatient
+            response = remoteDataSource.fechthRecords(token)
+            return response
+        }catch (e:Exception) {
+            Log.e("Repository", "Error al obtener los records: ${e.message}")
+            return null
+        }
     }
 
-    suspend fun fetchRecordById(token: String,id: String): RecordRespWithPatient{
+    suspend fun fetchRecordById(token: String,id: String): RecordRespWithPatient?{
         var response = remoteDataSource.fecthRecordById(token,id)
         return response
     }
 
     //Funcion para obtener appointments desde el id del record
-    suspend fun fetchAppointementsByIdRecord(token:String,id:String) : AppointementsResponse{
-        lateinit var response: AppointementsResponse
+    suspend fun fetchAppointementsByIdRecord(token:String,id:String) : AppointementsResponse?{
+         var response: AppointementsResponse?
         response = remoteDataSource.fechthAppointementsByIdRecord(token, id)
         return response
     }

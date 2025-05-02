@@ -31,6 +31,7 @@ import edu.hectorrodriguez.apiphysiocare.utils.checkConnection
 import edu.hectorrodriguez.apiphysiocare.utils.dataStore
 import edu.hectorrodriguez.apiphysiocare.utils.isPhysio
 import edu.hectorrodriguez.apiphysiocare.utils.pastAppointments
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.time.Instant
@@ -147,9 +148,14 @@ class DetailRecord : AppCompatActivity() {
                         binding.tvObservation.text = "Medical Record: ${it?.medicalRecord}"
                     }
                 }
-
+                delay(800)
+                if(adapter.currentList.isEmpty()){
+                    vm.logout()
+                    LoginActivity.navigate(this@DetailRecord)
+                }
             }
         }
+
     }
 
     override fun onResume() {
@@ -157,6 +163,7 @@ class DetailRecord : AppCompatActivity() {
         Log.e(TAG, "onResume: ")
         vm.getAppointmentById()
         showAppointments()
+
     }
     private fun showAppointments(){
         adapter.submitList(emptyList())
