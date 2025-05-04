@@ -97,7 +97,6 @@ class DetailRecord : AppCompatActivity() {
                     this@DetailRecord, "Error no se ha podido coger el RECORD",
                     Toast.LENGTH_SHORT
                 ).show()
-                finish()
             }
         }
     }
@@ -148,7 +147,7 @@ class DetailRecord : AppCompatActivity() {
                         binding.tvObservation.text = "Medical Record: ${it?.medicalRecord}"
                     }
                 }
-                delay(800)
+                delay(900)
                 if(adapter.currentList.isEmpty()){
                     vm.logout()
                     LoginActivity.navigate(this@DetailRecord)

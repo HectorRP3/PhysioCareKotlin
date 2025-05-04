@@ -71,7 +71,6 @@ class DetailAppointmentActivity : AppCompatActivity() {
                     this@DetailAppointmentActivity, "Error no se ha podido coger el appointemnt",
                     Toast.LENGTH_SHORT
                 ).show()
-                finish()
             }
         }
 

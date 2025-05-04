@@ -49,8 +49,8 @@ class MainViewModel(private val repository: Repository): ViewModel() {
     fun getSessionFlowRol() = repository.getSessionFlowRol()
 
     //////// Appointements ///////////
-    private val _appointementsState = MutableStateFlow(Appointments())
-    val appointementsState: MutableStateFlow<Appointments>
+    private val _appointementsState = MutableStateFlow<Appointments?>(Appointments())
+    val appointementsState: MutableStateFlow<Appointments?>
         get() = _appointementsState
 
     /**
@@ -68,14 +68,14 @@ class MainViewModel(private val repository: Repository): ViewModel() {
                 Log.i(TAG," Rol: $rol")
                 if (token != null) {
                     val appointementsAux = repository.fetchAppointements(token, id.toString(), rol.toString())
-                    if(appointementsAux != null){
+                    if(appointementsAux?.appointments != null){
                         _appointementsState.value = appointementsAux.appointments
                     }else{
-                        _appointementsState.value = Appointments()
+                        _appointementsState.value = null
                     }
                     Log.i(TAG," Appointements: ${_appointementsState.value}")
                 } else {
-                    _appointementsState.value = Appointments()
+                    _appointementsState.value = null
                 }
             }
         }catch (e:Exception){

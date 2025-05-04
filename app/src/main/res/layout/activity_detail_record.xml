@@ -48,6 +48,7 @@
                     android:layout_height="wrap_content"
                     android:text="Record"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="#F6F6F6"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     tools:layout_editor_absoluteY="20dp" />
@@ -57,6 +58,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="TextView"
+                    android:textColor="#FAF7F7"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
@@ -83,6 +85,7 @@
                     android:layout_height="wrap_content"
                     android:text="Patient"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="@color/md_theme_background"
                     tools:layout_editor_absoluteX="20dp"
                     tools:layout_editor_absoluteY="20dp" />
 
@@ -91,6 +94,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="TextView"
+                    android:textColor="@color/md_theme_background"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView17" />
@@ -100,6 +104,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="TextView"
+                    android:textColor="@color/md_theme_background"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvNombreP" />
@@ -109,6 +114,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="TextView"
+                    android:textColor="@color/md_theme_background"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvBirthdate" />
@@ -118,6 +124,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="TextView"
+                    android:textColor="@color/md_theme_background"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tvLicenseNumber" />

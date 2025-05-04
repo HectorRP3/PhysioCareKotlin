@@ -27,6 +27,7 @@ import edu.hectorrodriguez.apiphysiocare.utils.dataStore
 import edu.hectorrodriguez.apiphysiocare.utils.isPhysio
 import edu.hectorrodriguez.apiphysiocare.utils.isRecord
 import edu.hectorrodriguez.apiphysiocare.utils.pastAppointments
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.time.Instant
@@ -47,7 +48,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
-        LoginActivity.navigate(this@MainActivity)
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -91,8 +91,19 @@ class MainActivity : AppCompatActivity() {
         vm.setFragmentShowed(fragment.javaClass.simpleName)
     }
 
+     fun loadLogin(){
+        lifecycleScope.launch {
+            delay(500)
+            if(vm.getSessionFlow().first().second == ""){
+                LoginActivity.navigate(this@MainActivity)
+            }
+        }
+    }
+
     override fun onStart() {
         super.onStart()
+        loadLogin()
+
         binding.mToolbar.setOnMenuItemClickListener {
             when (it.itemId) {
 

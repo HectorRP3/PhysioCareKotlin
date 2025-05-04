@@ -80,21 +80,17 @@ class FragmentAppointment: Fragment()  {
             lifecycleScope.launch {
                 showAppointments()
                 delay(800)
-                if(adapter.currentList.isEmpty()){
+                if(sharedViewModel.appointementsState.value == null){
                     sharedViewModel.logout()
                     LoginActivity.navigate(requireActivity())
                 }
             }
-        }.onFailure {
-            sharedViewModel.logout()
-            LoginActivity.navigate(requireActivity())
         }
     }
 
     override fun onPause() {
         super.onPause()
         Log.i(TAG, "onPause")
-        adapter.submitList(emptyList())
     }
 
     override fun onDestroy() {
@@ -111,14 +107,14 @@ class FragmentAppointment: Fragment()  {
                     Log.d(TAG, "showAppointments: ${it}")
                     if (!pastAppointments) {
                         val dateNow = Instant.now().atZone(ZoneOffset.UTC)
-                        val appointemenFut = it.filter { d ->
+                        val appointemenFut = it?.filter { d ->
                             val date = Instant.parse(d.date).atZone(ZoneOffset.UTC)
                             date > dateNow
                         }
                         adapter.submitList(appointemenFut)
                     } else {
                         val dateNow = Instant.now().atZone(ZoneOffset.UTC)
-                        val appointementPast = it.filter { d ->
+                        val appointementPast = it?.filter { d ->
                             val date = Instant.parse(d.date).atZone(ZoneOffset.UTC)
                             date < dateNow
                         }

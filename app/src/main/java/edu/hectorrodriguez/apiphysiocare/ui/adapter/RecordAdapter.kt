@@ -36,7 +36,7 @@ class RecordAdapter(private val onRecordClick:(idRecord:String)-> Unit):  ListAd
         private val bind = ItemRecordsBinding.bind(view)
         fun bind(record: RecordItemWithPatient){
             bind.tvRecord.text = "Record: $adapterPosition"
-            bind.tvNamePatient.text = "Name: ${record.patient?.name} + ${record.patient?.surname}"
+            bind.tvNamePatient.text = "Name: ${record.patient?.name} ${record.patient?.surname}"
             bind.tvInsuranseNumber.text = "Insuranse Number: ${record.patient?.insuranceNumber}"
             itemView.setOnClickListener {
                 onRecordClick(record.id.toString())
