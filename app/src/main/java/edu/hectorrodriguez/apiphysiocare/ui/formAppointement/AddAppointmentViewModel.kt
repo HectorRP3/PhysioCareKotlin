@@ -13,6 +13,14 @@ import kotlinx.coroutines.launch
 class AddAppointmentViewModel(private val repository: Repository,private val idRecord: String):ViewModel() {
     private val TAG = AddAppointmentViewModel::class.java.simpleName
 
+    /**
+     * Función para añadir un appointment a la api
+     * @author Héctor Rodríguez Planelles
+     * @param date String date
+     * @param diagnosis String diagnosis
+     * @param observations String observations
+     * @param treatment String treatment
+     */
     fun addAppointemnt(
         date: String,
         diagnosis: String,

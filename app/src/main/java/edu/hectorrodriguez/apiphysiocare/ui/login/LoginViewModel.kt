@@ -17,6 +17,12 @@ class LoginViewModel(private val repository: Repository):ViewModel() {
     val loginState: StateFlow<LoginState>
         get() = _loginState
 
+    /**
+     * Función para inciar sesión y obteneer el token
+     * @author Héctor Rodríguez Planelles
+     * @param user Usuario
+     * @param password Contraseña
+     */
     //Función para inciar sesión y obteneer el token
     fun login(user:String, password:String){
         viewModelScope.launch {

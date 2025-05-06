@@ -51,6 +51,7 @@ class LoginActivity : AppCompatActivity() {
             insets
         }
 
+        //accion de logearse
         binding.btnLogin.setOnClickListener{
             if(comprobarCampos()){
                 if(checkConnection(this)){

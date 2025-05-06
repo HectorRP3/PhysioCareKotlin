@@ -22,6 +22,10 @@ class DetailAppointmentViewModel(private val repository: Repository,private val 
     val physio: MutableStateFlow<PhysioItem?>
         get() = _physio
 
+    /**
+     * Función para obtener todos los appointments de la api y los guarda en un mutable state flow
+     * @author Héctor Rodríguez Planelles
+     */
     fun getAppointemnt(){
         viewModelScope.launch {
             Log.i(TAG,"GET APPOINTMENTS")

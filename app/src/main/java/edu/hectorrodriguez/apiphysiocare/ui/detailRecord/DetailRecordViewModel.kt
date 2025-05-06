@@ -22,6 +22,10 @@ class DetailRecordViewModel(private val repository: Repository,private val idRec
     val record: MutableStateFlow<RecordItemWithPatient?>
         get() = _record
 
+    /**
+     * Función para obtener todos los appointments de la api y los guarda en un mutable state flow
+     * @author Héctor Rodríguez Planelles
+     */
     fun getRecordById(){
         viewModelScope.launch {
             val token = repository.getSessionFlowUser().first().first
@@ -37,6 +41,10 @@ class DetailRecordViewModel(private val repository: Repository,private val idRec
     val appointementsState: MutableStateFlow<Appointments?>
         get() = _appointementsState
 
+    /**
+     * Función para obtener todos los appointments de la api y los guarda en un mutable state flow
+     * @author Héctor Rodríguez Planelles
+     */
     fun getAppointmentById(){
         viewModelScope.launch {
             val token = repository.getSessionFlowUser().first().first
@@ -48,6 +56,10 @@ class DetailRecordViewModel(private val repository: Repository,private val idRec
         }
     }
 
+    /**
+     * Función para cerrar sesión
+     * @author Héctor Rodríguez Planelles
+     */
     //Función para cerrar sesión
     fun logout() {
         viewModelScope.launch {
@@ -55,6 +67,11 @@ class DetailRecordViewModel(private val repository: Repository,private val idRec
         }
     }
 
+    /**
+     * Función para eliminar un appointment
+     * @param id Id del appointment
+     * @author Héctor Rodríguez Planelles
+     */
     fun deleteAppointement(id: String) {
         viewModelScope.launch {
             val token = repository.getSessionFlowUser().first().first

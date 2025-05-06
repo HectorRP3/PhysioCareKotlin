@@ -69,7 +69,7 @@ class FragmentRecord: Fragment() {
 
     override fun onStart() {
         super.onStart()
-
+        // buscar para buscar por texto
         binding.Search.setOnQueryTextListener(
             object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {

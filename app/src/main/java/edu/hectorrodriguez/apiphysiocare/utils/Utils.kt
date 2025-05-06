@@ -23,6 +23,10 @@ fun  checkConnection(context: Context) : Boolean{
     return false
 }
 
+//Para ver si esta en la navegacion de pasado o futuras
 var pastAppointments = true
+//Para ver si es fisio o paciente
 var isPhysio = false
+//Para ver si esta en la navegacion de record para que cuando se meta en un record al volver
+// para atras no cargue el fragemento de appointments si no el de records
 var isRecord = false

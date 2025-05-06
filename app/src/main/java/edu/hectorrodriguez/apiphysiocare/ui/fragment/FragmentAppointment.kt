@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import edu.hectorrodriguez.apiphysiocare.databinding.AppointementFragmentBinding
 import edu.hectorrodriguez.apiphysiocare.ui.adapter.AppointementAdapter
 import edu.hectorrodriguez.apiphysiocare.ui.detailAppointment.DetailAppointmentActivity
@@ -78,11 +79,34 @@ class FragmentAppointment: Fragment()  {
         Log.i(TAG, "onResume")
         runCatching {
             lifecycleScope.launch {
-                showAppointments()
-                delay(800)
-                if(sharedViewModel.appointementsState.value == null){
-                    sharedViewModel.logout()
-                    LoginActivity.navigate(requireActivity())
+                sharedViewModel.appointementsState.collect {
+                    Log.d(TAG, "onResume: ${it}")
+                    delay(2000)
+                    if(it == null){
+                        MaterialAlertDialogBuilder(requireContext())     // ← usa el tema Material del contexto
+                            .setTitle("No tienes citas")
+                            .setMessage("No tienes citas programadas, pide al physio que te programe una cita")
+                            .show()
+                        sharedViewModel.logout()
+                        LoginActivity.navigate(requireActivity())
+                    }
+                    val dateNow = Instant.now().atZone(ZoneOffset.UTC)
+                    val appointemenFut = it?.filter { d ->
+                        val date = Instant.parse(d.date).atZone(ZoneOffset.UTC)
+                        date > dateNow
+                    }
+                    val appointementPast = it?.filter { d ->
+                        val date = Instant.parse(d.date).atZone(ZoneOffset.UTC)
+                        date < dateNow
+                    }
+                    if(appointementPast.isNullOrEmpty()) {
+                        Toast.makeText(requireContext(), "No se hay citas pasadas", Toast.LENGTH_SHORT).show()
+                    }
+                    if(appointemenFut.isNullOrEmpty()){
+                        Toast.makeText(requireContext(), "No se hay citas futuras", Toast.LENGTH_SHORT).show()
+                    }
+
+
                 }
             }
         }

@@ -83,6 +83,12 @@ class MainViewModel(private val repository: Repository): ViewModel() {
             appointementsState.value = Appointments()
         }
     }
+
+    /**
+     * Función para obtener todos los appointments de la api y los guarda en un mutable state flow
+     * @author Héctor Rodríguez Planelles
+     * @param id Id del appointment
+     */
     //delete appointement by id
     fun deleteAppointement(id: String) {
         viewModelScope.launch {
@@ -100,6 +106,11 @@ class MainViewModel(private val repository: Repository): ViewModel() {
     private val _recordsState= MutableStateFlow<RecordsWithPatient?>(null)
     val recordState: MutableStateFlow<RecordsWithPatient?>
         get() = _recordsState
+
+    /**
+     * Función para obtener todos los records de la api y los guarda en un mutable state flow
+     * @author Héctor Rodríguez Planelles
+     */
     fun getRecords(){
         viewModelScope.launch {
             val token = repository.getSessionFlowUser().first().first
@@ -122,6 +133,10 @@ class MainViewModel(private val repository: Repository): ViewModel() {
     val fragmentShowed: String?
         get() = _fragmentShowed
 
+    /**
+     * Función para guardar el nombre del fragmento que se ha mostrado
+     * @author Héctor Rodríguez Planelles
+     */
     fun setFragmentShowed(fragmentName:String){
         _fragmentShowed = fragmentName
     }

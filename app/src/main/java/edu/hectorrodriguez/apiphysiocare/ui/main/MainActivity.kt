@@ -84,6 +84,10 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    /**
+     *  Cargar el fragmento correspondiente
+     *  @param fragment Fragmento a cargar
+     */
     private fun loadFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(binding.mFrameLayout.id, fragment)
@@ -91,6 +95,10 @@ class MainActivity : AppCompatActivity() {
         vm.setFragmentShowed(fragment.javaClass.simpleName)
     }
 
+    /**
+     *   Cargar el login si no hay sesion iniciada
+     *   @author Hector Rodriguez
+     */
      fun loadLogin(){
         lifecycleScope.launch {
             delay(500)
@@ -158,6 +166,11 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
+    /**
+     *   Muestra un dialogo con la informacion de la aplicacion
+     *   @author Hector Rodriguez
+     */
     private fun mostrarAcerca(){
         val bindDialog = LayoutUserinfoBinding.inflate(layoutInflater)
 
@@ -171,11 +184,17 @@ class MainActivity : AppCompatActivity() {
         dialog.show()
     }
 
+    /**
+     *   Bloquea los botones de la barra de navegacion para los pacientes
+     */
     private fun blockRolButtonsPatients(){
         binding.mBottomNavView.menu.findItem(R.id.btnRecords).isVisible = false
 
     }
 
+    /**
+     *  Desbloquea los botones de la barra de navegacion para los fisios
+     */
     private fun unBlockRolButtonsPhysios(){
         binding.mBottomNavView.menu.findItem(R.id.btnRecords).isVisible = true
     }

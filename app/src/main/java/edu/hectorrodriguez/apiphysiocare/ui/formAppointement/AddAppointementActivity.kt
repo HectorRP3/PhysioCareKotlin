@@ -65,7 +65,7 @@ class AddAppointementActivity : AppCompatActivity() {
         var date: String
         var observations: String
         var treatment: String
-
+        //accion para agregar una cita
         binding.btnAddAppointment.setOnClickListener {
             diagnosis = binding.tietDiagnosis.text.toString()
             date = binding.etDate.text.toString()

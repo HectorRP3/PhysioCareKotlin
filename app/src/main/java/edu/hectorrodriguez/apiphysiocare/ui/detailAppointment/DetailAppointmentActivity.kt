@@ -81,6 +81,7 @@ class DetailAppointmentActivity : AppCompatActivity() {
         super.onStart()
         if(checkConnection(this)) {
             lifecycleScope.launch {
+                // Aqui cojo los appointmenes y el physio para mostrarlos
                 combine(vm.appointment,vm.physio) { appointment, physio ->
                     if(appointment != null && physio != null) {
                         Log.e("TAG", "onStart: ${appointment}")

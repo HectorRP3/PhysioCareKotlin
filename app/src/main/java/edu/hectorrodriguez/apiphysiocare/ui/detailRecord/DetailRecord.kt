@@ -104,6 +104,7 @@ class DetailRecord : AppCompatActivity() {
         super.onStart()
         vm.getAppointmentById()
         showAppointments()
+        //Botnoes de la mToolbar
         binding.mToolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.btnAdd-> {
@@ -118,7 +119,7 @@ class DetailRecord : AppCompatActivity() {
             }
         }
 
-
+        //cargar los datos
         if (checkConnection(this)) {
             lifecycleScope.launch {
                 showAppointments()
@@ -164,6 +165,11 @@ class DetailRecord : AppCompatActivity() {
         showAppointments()
 
     }
+
+    /**
+     * * Este método se encarga de mostrar las citas en el RecyclerView.
+     * @author Hector Rodriguez
+     */
     private fun showAppointments(){
         adapter.submitList(emptyList())
         if(checkConnection(this)) {
