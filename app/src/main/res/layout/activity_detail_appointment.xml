@@ -29,6 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:padding="10dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.cardview.widget.CardView
@@ -39,6 +40,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/bg_card_appointment"
                 android:padding="20dp">
 
@@ -46,7 +48,7 @@
                     android:id="@+id/titileAppointme"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Appoinemt"
+                    android:text="Appointment"
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                     android:textColor="@color/md_theme_background"
                     app:layout_constraintBottom_toTopOf="@+id/tvDate"

@@ -9,7 +9,6 @@ import edu.hectorrodriguez.apiphysiocare.model.appointements.AppointmentsRequest
 import edu.hectorrodriguez.apiphysiocare.model.physios.PhysioIdResponse
 import edu.hectorrodriguez.apiphysiocare.model.records.RecordResp
 import edu.hectorrodriguez.apiphysiocare.model.records.RecordRespWithPatient
-import edu.hectorrodriguez.apiphysiocare.model.records.RecordResponse
 import edu.hectorrodriguez.apiphysiocare.model.records.RecordResponseWithPatient
 import edu.hectorrodriguez.apiphysiocare.utils.SessionManager
 import kotlinx.coroutines.flow.Flow
@@ -65,6 +64,12 @@ class Repository(private val sessionManager: SessionManager){
 
 
     ////////// Records ///////////
+    /**
+     * Funcion para obtener todos los records de la api
+     * @param token Token de la sesión
+     * @return Devuelve un objeto RecordResponseWithPatient con todos los records o nullo si ha habido un error
+     * @author Héctor Rodríguez Planelles
+     */
     suspend fun fetchRecords(token:String): RecordResponseWithPatient?{
         try{
             lateinit var response: RecordResponseWithPatient
@@ -76,12 +81,26 @@ class Repository(private val sessionManager: SessionManager){
         }
     }
 
+    /**
+     * Funcion para obtener un record por id
+     * @param token Token de la sesión
+     * @param id Id del record
+     * @return Devuelve un objeto RecordRespWithPatient con el record o nullo si ha habido un error
+     * @author Héctor Rodríguez Planelles
+     */
     suspend fun fetchRecordById(token: String,id: String): RecordRespWithPatient?{
         var response = remoteDataSource.fecthRecordById(token,id)
         return response
     }
 
     //Funcion para obtener appointments desde el id del record
+    /**
+     * Funcion para obtener appointments desde el id del record
+     * @param token Token de la sesión
+     * @param id Id del record
+     * @return Devuelve un objeto AppointementsResponse con los appointments o nullo si ha habido un error
+     * @author Héctor Rodríguez Planelles
+     */
     suspend fun fetchAppointementsByIdRecord(token:String,id:String) : AppointementsResponse?{
          var response: AppointementsResponse?
         response = remoteDataSource.fechthAppointementsByIdRecord(token, id)
@@ -114,6 +133,13 @@ class Repository(private val sessionManager: SessionManager){
         }
     }
 
+    /**
+     * Funcion para obtener un appointment por id
+     * @param token Token de la sesión
+     * @param id Id del appointment
+     * @return Devuelve un objeto AppointementResponse con el appointment o nullo si ha habido un error
+     * @author Héctor Rodríguez Planelles
+     */
     suspend fun fecthAppointemenById(token:String,id:String) : AppointementResponse? {
         lateinit var response: AppointementResponse
         try{
@@ -124,6 +150,13 @@ class Repository(private val sessionManager: SessionManager){
         }
     }
 
+    /**
+     * Funcion para obtener un physio por id
+     * @param token Token de la sesión
+     * @param id Id del physio
+     * @return Devuelve un objeto PhysioIdResponse con el physio o nullo si ha habido un error
+     * @author Héctor Rodríguez Planelles
+     */
     suspend fun fecthPhysioById(token:String,id:String) : PhysioIdResponse? {
         lateinit var response: PhysioIdResponse
         try{
@@ -135,6 +168,13 @@ class Repository(private val sessionManager: SessionManager){
     }
 
     //delte appointment by id
+    /**
+     * Funcion para eliminar un appointment por id
+     * @param token Token de la sesión
+     * @param id Id del appointment
+     * @return Devuelve true si se ha eliminado el appointment o false si ha habido un error
+     * @author Héctor Rodríguez Planelles
+     */
     suspend fun deleteAppointement(token:String,id:String) : Boolean {
         try{
             remoteDataSource.deleteAppointment(token, id)

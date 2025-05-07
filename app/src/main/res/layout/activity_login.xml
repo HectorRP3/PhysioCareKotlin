@@ -69,6 +69,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Login" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:autoSizeMaxTextSize="10dp"
+            android:text="PHYSIO: User:hector3, password:1234 " />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="PATIENT:User:hector4,password:1234" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Puede ser que el servicio, al hacer la petición, puede que te devuelva al login. puse un delay, pero a veces tarda más la petición que el delay" />
     </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

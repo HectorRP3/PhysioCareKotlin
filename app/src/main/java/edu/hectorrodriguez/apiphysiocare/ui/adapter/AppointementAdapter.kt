@@ -31,9 +31,8 @@ class AppointementAdapter(private val onAppointementClick:(idAppointement:String
     }
     inner class AppointementViewHolder(view: View): RecyclerView.ViewHolder(view){
         private val bind = ItemAppointmentsBinding.bind(view)
-        private var number = 0
         fun bind(appointement: AppointmentsItem){
-            bind.tvAppointement.setText("Appointement ${adapterPosition+1}")
+            bind.tvAppointement.setText("Appointment ${adapterPosition+1}")
             val date = appointement.date
             val dateFormar = Instant.parse(date).atZone(ZoneOffset.UTC)
             val resultado = dateFormar.format(DateTimeFormatter.ISO_LOCAL_DATE )

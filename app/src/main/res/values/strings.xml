@@ -18,5 +18,5 @@
     <string name="record">Record</string>
     <string name="campo_requerido">Campo requerido</string>
     <string name="error_cita">Error no se ha podido añadir la cita</string>
-    <string name="fecha_incorrecya">Fecha incorrecya</string>
+    <string name="fecha_incorrecya">Fecha incorrect  mes/dia/año</string>
 </resources>

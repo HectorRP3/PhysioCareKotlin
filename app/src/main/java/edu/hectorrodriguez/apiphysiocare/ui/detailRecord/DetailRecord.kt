@@ -119,6 +119,12 @@ class DetailRecord : AppCompatActivity() {
             }
         }
 
+        binding.swipeRefresh.setOnRefreshListener {
+            binding.swipeRefresh.isRefreshing = true
+            showAppointments()
+            binding.swipeRefresh.isRefreshing = false
+        }
+
         //cargar los datos
         if (checkConnection(this)) {
             lifecycleScope.launch {

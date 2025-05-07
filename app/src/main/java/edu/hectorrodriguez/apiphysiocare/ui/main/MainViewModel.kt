@@ -11,6 +11,7 @@ import edu.hectorrodriguez.apiphysiocare.model.appointements.AppointementsRespon
 import edu.hectorrodriguez.apiphysiocare.model.appointements.Appointments
 import edu.hectorrodriguez.apiphysiocare.model.records.RecordResponseWithPatient
 import edu.hectorrodriguez.apiphysiocare.model.records.RecordsWithPatient
+import edu.hectorrodriguez.apiphysiocare.utils.isRecord
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
@@ -20,25 +21,9 @@ class MainViewModel(private val repository: Repository): ViewModel() {
     private val TAG = MainViewModel::class.java.simpleName
 
     ////////// Login ////////////
-    private val _loginState = MutableStateFlow<LoginState>(LoginState.Idle)
-    val loginState: StateFlow<LoginState>
-        get() = _loginState
-
-    //Función para inciar sesión y obteneer el token
-    fun login(user:String, password:String){
-        viewModelScope.launch {
-            _loginState.value = LoginState.Loading
-            try{
-                val response = repository.login(LoginRequest(user,password))
-                _loginState.value = LoginState.Success(response)
-
-            }catch (e:Exception){
-                _loginState.value = LoginState.Error(e.message ?: "Error desconocido")
-            }
-        }
-    }
     //Función para cerrar sesión
     fun logout() {
+        isRecord = false
         viewModelScope.launch {
             repository.logout()
         }

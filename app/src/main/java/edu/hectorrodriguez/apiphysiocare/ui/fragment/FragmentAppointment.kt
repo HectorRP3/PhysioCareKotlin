@@ -71,6 +71,12 @@ class FragmentAppointment: Fragment()  {
     override fun onStart() {
         super.onStart()
         showAppointments()
+
+        binding.swipeRefresh.setOnRefreshListener {
+            binding.swipeRefresh.isRefreshing = true
+            showAppointments()
+            binding.swipeRefresh.isRefreshing = false
+        }
     }
 
 
@@ -79,11 +85,12 @@ class FragmentAppointment: Fragment()  {
         Log.i(TAG, "onResume")
         runCatching {
             lifecycleScope.launch {
+                delay(2000)
                 sharedViewModel.appointementsState.collect {
                     Log.d(TAG, "onResume: ${it}")
-                    delay(2000)
+                    delay(500)
                     if(it == null){
-                        MaterialAlertDialogBuilder(requireContext())     // ← usa el tema Material del contexto
+                        MaterialAlertDialogBuilder(requireContext())
                             .setTitle("No tienes citas")
                             .setMessage("No tienes citas programadas, pide al physio que te programe una cita")
                             .show()

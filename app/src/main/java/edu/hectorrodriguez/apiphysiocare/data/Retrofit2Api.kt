@@ -23,7 +23,6 @@ import retrofit2.http.Query
 class Retrofit2Api {
     companion object {
         const val BASE_URL = "https://hectorrp.com/api/"
-        //const val BASE_URL = "http://localhost:8080"
         fun getRetrofit2Api(): Retrofit2ApiInterface {
             return retrofit2.Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -38,32 +37,31 @@ interface Retrofit2ApiInterface {
     @POST("auth/login")
     @Headers("Content-Type: application/json")
     suspend fun login(@Body request: LoginRequest) : Response<LoginResponse>
-
+    //coger todo los appointments
     @GET("records/moviles")
     suspend fun getRecords(@Header("Authorization") token: String): Response<RecordResponseWithPatient>
-
+    //coger el record por id patient
     @GET("records/patient/{id}")
     suspend fun getRecordsById(@Header("Authorization") token: String,@Path("id") id: String): Response<RecordRespWithPatient>
-
+    //Coger appointment por id de record
     @GET("records/{id}/appointments")
     suspend fun getAppointmentsByIdRecord(@Header("Authorization") token: String,@Path("id") id: String): Response<AppointementsResponse>
-
     @POST("records/appointments/{id}")
     @Headers("Content-Type: application/json")
     suspend fun createAppointment(@Header("Authorization") token: String, @Path("id") id: String, @Body appointment: AppointmentsRequest): Response<RecordResp>
-
+    //Coger todos los appointments de patientsId
     @GET("records/appointments/patients/{id}")
     suspend fun getAppointmentsByIdPateint(@Header("Authorization") token: String, @Path("id") id: String): Response<AppointementsResponse>
-
+    //coger todos los appointment por physioId
     @GET("records/appointments/physio/{id}")
     suspend fun getAppointmentsByIdPhysio(@Header("Authorization") token: String, @Path("id") id: String): Response<AppointementsResponse>
-
+    //coger appointment por id
     @GET("records/appointments/{id}")
     suspend fun getAppointmentById(@Header("Authorization") token: String, @Path("id") id: String):Response<AppointementResponse>
-
+    //coger physio por id
     @GET("physios/{id}")
     suspend fun getPhysioById(@Header("Authorization") token: String, @Path("id") id: String):Response<PhysioIdResponse>
-
+    //borrar appointment
     @DELETE("records/appointments/{id}")
     suspend fun deleteAppointment(@Header("Authorization") token: String, @Path("id") id: String): Response<Void>
 }

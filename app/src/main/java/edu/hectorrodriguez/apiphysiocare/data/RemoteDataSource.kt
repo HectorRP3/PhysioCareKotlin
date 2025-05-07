@@ -31,6 +31,15 @@ class RemoteDataSource {
     }
 
     //Funcion para crear un appointment
+    /**
+     * Funcion para crear un appointment
+     * @author Héctor Rodríguez Planelles
+     * @param token Token de la sesión
+     * @param id Id del usuario
+     * @param appointment Objeto AppointmentsRequest con los datos del appointment
+     * @return Devuelve un objeto RecordResp con el appointment creado o null si ha habido un error
+     * @author Héctor Rodríguez Planelles
+     */
     suspend fun createAppointment(token: String,id:String, appointment: AppointmentsRequest): RecordResp?{
         val response = api.createAppointment("Bearer $token",id,appointment)
         if(response.isSuccessful){
@@ -44,6 +53,11 @@ return null
     }
 
     //Funcion para obtener todos los recordsç
+    /**
+     * Funcion para obtener todos los records
+     * @param token Token de la sesión
+     * @author Héctor Rodríguez Planelles
+     */
     suspend fun fechthRecords(token:String) : RecordResponseWithPatient{
         val response = api.getRecords("Bearer $token")
         if(response.isSuccessful){
@@ -56,6 +70,13 @@ return null
         }
     }
 
+    /**
+     * Funcion para obtener un record por id
+     * @author Héctor Rodríguez Planelles
+     * @param token Token de la sesión
+     * @param id Id del record
+     * @return Devuelve un objeto RecordRespWithPatient con el record o nullo si ha habido un error
+     */
     suspend fun fecthRecordById(token: String,id:String): RecordRespWithPatient?{
         val response = api.getRecordsById("Bearer $token",id)
         if(response.isSuccessful){
@@ -68,6 +89,14 @@ return null
         }
     }
 
+    /**
+     * Funcion para obtener appointments desde el id del record
+     * @author Héctor Rodríguez Planelles
+     *
+     * @param token Token de la sesión
+     * @param id Id del record
+     * @return Devuelve un objeto AppointementsResponse con los appointments o nullo si ha habido un error
+     */
     //Funcion para obtener appointments desde el id del record
     suspend fun fechthAppointementsByIdRecord(token:String,id:String) : AppointementsResponse?{
         val response = api.getAppointmentsByIdRecord("Bearer $token",id)
@@ -81,6 +110,13 @@ return null
         }
     }
 
+    /**
+     * Funcion para obtener appointments desde el id del paciente
+     * @author Héctor Rodríguez Planelles
+     * @param token Token de la sesión
+     * @param id Id del paciente
+     * @return Devuelve un objeto AppointementsResponse con los appointments o nullo si ha habido un error
+     */
     //Función para obtener appointments desde el id del paciente
     suspend fun fechthAppointementsPatient(token:String,id:String) : AppointementsResponse{
         val response = api.getAppointmentsByIdPateint("Bearer $token",id)
@@ -94,6 +130,13 @@ return null
         }
     }
 
+    /**
+     * Funcion para obtener appointments desde el id del fisio
+     * @author Héctor Rodríguez Planelles
+     * @param token Token de la sesión
+     * @param id Id del fisio
+     * @return Devuelve un objeto AppointementsResponse con los appointments o nullo si ha habido un error
+     */
     //Función para obtener appointments desde el id del fisio
     suspend fun fechthAppointementsPhysio(token:String,id:String) : AppointementsResponse{
         val response = api.getAppointmentsByIdPhysio("Bearer $token",id)
@@ -107,6 +150,13 @@ return null
         }
     }
 
+    /**
+     * Funcion para obtener un appointement desde el id del appointement
+     * @author Héctor Rodríguez Planelles
+     * @param token Token de la sesión
+     * @param id Id del appointement
+     * @return Devuelve un objeto AppointementResponse con el appointement o nullo si ha habido un error
+     */
     //Funcion para obtener un appointement desde el id del appointement
     suspend fun fecthAppointmentsById(token: String,id:String): AppointementResponse{
         val response = api.getAppointmentById("Bearer $token",id)
@@ -120,6 +170,14 @@ return null
         }
     }
 
+    /**
+     * Funcion para obtener un physio por id
+     * @author Héctor Rodríguez Planelles
+     * @param token Token de la sesión
+     * @param id Id del physio
+     * @return Devuelve un objeto PhysioIdResponse con el physio o nullo si ha habido un error
+     *
+     */
     //Coger un physio por id
     suspend fun fecthPhysioById(token: String,id:String): PhysioIdResponse{
         val response = api.getPhysioById("Bearer $token",id)
@@ -133,6 +191,13 @@ return null
         }
     }
 
+    /**
+     * Funcion para borrar un appointment by id
+     * @author Héctor Rodríguez Planelles
+     * @param token Token de la sesión
+     * @param id Id del appointment
+     * @return Devuelve true si se ha borrado el appointment o false si ha habido un error
+     */
     //Funcion para borrar un appointment by id
     suspend fun deleteAppointment(token: String,id:String): Boolean{
         val response = api.deleteAppointment("Bearer $token",id)
